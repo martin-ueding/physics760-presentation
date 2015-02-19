@@ -34,6 +34,8 @@
     \end{frame}
 }
 
+\setbeamertemplate{navigation symbols}{}
+
 \begin{document}
 
 \nocite{Knippschild/Pi_Pi_Scattering}
@@ -47,14 +49,22 @@
     \tableofcontents
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                               Data generation                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Data generation}
 
 \subsection{Metropolis algorithm}
 
 \subsection{Correlation functions}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                              Analysis methods                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Analysis}
+
+\section{Analysis methods}
 
 \newcommand\scale{0.2}
 
@@ -106,12 +116,95 @@
     \includegraphics[scale=\scale]{sketches/08-end-result.pdf}
 \end{frame}
 
-%\section{References}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                   Results                                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Results}
+
 
 \begin{frame}
-    %\frametitle{References}
+    \begin{centering}
+        \includegraphics[height=\textheight]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c2_folded.pdf}
+    \end{centering}
+\end{frame}
+
+\begin{frame}
+    \begin{centering}
+        \includegraphics[height=\textheight]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c4_folded.pdf}
+    \end{centering}
+\end{frame}
+
+\begin{frame}
+    \begin{centering}
+        \includegraphics[height=\textheight]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c2_m_eff.pdf}
+    \end{centering}
+\end{frame}
+
+\begin{frame}
+    \begin{centering}
+        \includegraphics[height=\textheight]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c4_m_eff.pdf}
+    \end{centering}
+\end{frame}
+
+\begin{frame}
+    \begin{centering}
+        \includegraphics[height=\textheight]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_boot-hist_a_0*m_2.pdf}
+    \end{centering}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                 End matter                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section*{References}
+
+\begin{frame}
+    \frametitle{References}
 
     \printbibliography
+\end{frame}
+
+\section*{Download}
+
+\begin{frame}
+    \frametitle{Get the paper}
+
+    \begin{columns}[t]
+        \begin{column}{0.5\linewidth}
+            To get the paper, go to:
+            \begin{itemize}
+                \item \href{http://martin-ueding.de/en/university/msc_physics/physics760/index.html}{martin-ueding.de}
+                \item University
+                \item Master of Science in Physics
+                \item physics760 Computational Physics
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\linewidth}
+            Or scan the code:
+            \begin{centering}
+                \includegraphics[width=\linewidth]{physics760.png}
+            \end{centering}
+        \end{column}
+    \end{columns}
+
 \end{frame}
 
 \end{document}
