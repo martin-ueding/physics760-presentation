@@ -1,4 +1,4 @@
-% Copyright © 2012-2014 Martin Ueding <dev@martin-ueding.de>
+% Copyright © 2012-2015 Martin Ueding <dev@martin-ueding.de>
 
 % This is my general purpose LaTeX header file for writing German documents.
 % Ideally, you include this using a simple ``\input{header.tex}`` in your main
@@ -38,6 +38,11 @@
   \@colortrue
 }
 
+\newif\if@beamer\@beamerfalse
+\DeclareOption{beamer}{
+  \@beamertrue
+}
+
 \ProcessOptions\relax
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -47,8 +52,6 @@
 \RequirePackage{ifluatex}
 
 \RequirePackage{graphicx}
-
-\RequirePackage{csquotes}
 
 \RequirePackage{booktabs}
 
@@ -77,7 +80,10 @@
 %                                    Color                                    %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage[usenames, dvipsnames]{xcolor}
+\if@beamer
+\else
+    \RequirePackage[usenames, dvipsnames]{xcolor}
+\fi
 
 \colorlet{darkred}{red!70!black}
 \colorlet{darkblue}{blue!70!black}
@@ -96,10 +102,13 @@
 % Bold, sans-serif tensors. This fragment is taken from “egreg” from
 % http://tex.stackexchange.com/a/82747/8945 and licensed under `CC-BY-SA
 % <https://creativecommons.org/licenses/by-sa/3.0/>`_.
-\RequirePackage{bm}
-\DeclareMathAlphabet{\mathsfit}{\encodingdefault}{\sfdefault}{m}{sl}
-\SetMathAlphabet{\mathsfit}{bold}{\encodingdefault}{\sfdefault}{bx}{sl}
-\newcommand{\tens}[1]{\bm{\mathsfit{#1}}}
+\if@beamer
+\else
+    \RequirePackage{bm}
+    \DeclareMathAlphabet{\mathsfit}{\encodingdefault}{\sfdefault}{m}{sl}
+    \SetMathAlphabet{\mathsfit}{bold}{\encodingdefault}{\sfdefault}{bx}{sl}
+    \newcommand{\tens}[1]{\bm{\mathsfit{#1}}}
+\fi
 
 % Bold vectors.
 \renewcommand{\vec}[1]{\boldsymbol{#1}}
@@ -114,34 +123,39 @@
     \RequirePackage[utf8]{inputenc}
 \fi
 
+\RequirePackage{csquotes}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                         Hyperrefs and PDF metadata                          %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage{hyperref}
-
-% This sets the author in the properties of the PDF as well. If you want to
-% change it, just override it with another ``\hypersetup`` call.
-\hypersetup{
-    breaklinks=false,
-    colorlinks=true,
-    pdfauthor={Martin Ueding},
-}
-
-\if@color
-    \hypersetup{
-        citecolor=darkgreen,
-        linkcolor=darkblue,
-        menucolor=black,
-        urlcolor=darkblue,
-    }
+\if@beamer
 \else
+    \RequirePackage{hyperref}
+
+    % This sets the author in the properties of the PDF as well. If you want to
+    % change it, just override it with another ``\hypersetup`` call.
     \hypersetup{
-        citecolor=black,
-        linkcolor=black,
-        menucolor=black,
-        urlcolor=black,
+        breaklinks=false,
+        colorlinks=true,
+        pdfauthor={Martin Ueding},
     }
+
+    \if@color
+        \hypersetup{
+            citecolor=darkgreen,
+            linkcolor=darkblue,
+            menucolor=black,
+            urlcolor=darkblue,
+        }
+    \else
+        \hypersetup{
+            citecolor=black,
+            linkcolor=black,
+            menucolor=black,
+            urlcolor=black,
+        }
+    \fi
 \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -246,14 +260,17 @@
 % If you do not want this for your document, you can just use
 % ``\pagestyle{plain}``.
 
-\RequirePackage{scrpage2}
+\if@beamer
+\else
+    \RequirePackage{scrpage2}
 
-\pagestyle{scrheadings}
-\automark{section}
-\chead{}
-\ihead{}
-\ohead{\rightmark}
-\setheadsepline{.4pt}
+    \pagestyle{scrheadings}
+    \automark{section}
+    \chead{}
+    \ihead{}
+    \ohead{\rightmark}
+    \setheadsepline{.4pt}
+\fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                            Bibliography (BibTeX)                            %
