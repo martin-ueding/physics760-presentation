@@ -44,13 +44,22 @@ methods used will be explained along the way when they are needed.
     \centering
     \includegraphics[width=\linewidth]{sketches/Zeichnung.pdf}
     \caption{%
-        Data flow in the analysis.
+        Data flow in the analysis. The first is the import of the data, which
+        is covered in section~\ref{sec:import}. The two and four point
+        functions are combined into pairs for each configuration. The data is
+        then folded in half. The bootstrap step is covered in
+        section~\ref{sec:bootstrap}. Then a correlated fit is performed, see
+        section~\ref{sec:correlated_fit} for details. The second to last step
+        is the application of Lüscher's formula, see
+        section~\ref{sec:scattering_length}. The results are shown in
+        section~\ref{sec:results}.
     }
     \label{fig:analysis-flow}
 \end{figure}
 
 
 \subsection{Import data}
+\label{sec:import}
 
 The data that I was given is organized in different ensembles (like A30.32,
 A100.24). For each ensembles, multiple configurations were simulated. The
@@ -69,20 +78,26 @@ multiple times, those are the different versions.
 
 The number of configurations in each ensemble is called $N$.
 
+% TODO Folding
+
 \subsection{Bootstrap}
+\label{sec:bootstrap}
 
 All error estimation is done with the bootstrap method. The number of bootstrap
 samples $R$ was set to $R = 3N$.
 
 \subsection{Correlated fit}
+\label{sec:correlated_fit}
 
 The computed masses are shown in table~\ref{tab:masses}.
 
 \subsection{Scattering length}
+\label{sec:scattering_length}
 
 The computed scattering lengths are shown in table~\ref{tab:masses}.
 
 \section{Results}
+\label{sec:results}
 
 \begin{table}
     \centering
