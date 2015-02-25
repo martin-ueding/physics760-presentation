@@ -9,6 +9,9 @@
     pdftitle=
 }
 
+\newcommand\mpi{m_{\piup}}
+\newcommand\mpipi{m_{\piup\piup}}
+
 \subject{physics760 Computational Physics}
 \title{Analysis of $\piup$-$\piup$ lattice QCD scattering data}
 %\subtitle{}
@@ -44,8 +47,8 @@ methods used will be explained along the way when they are needed.
     \centering
     \includegraphics[width=\linewidth]{sketches/Zeichnung.pdf}
     \caption{%
-        Data flow in the analysis. The first is the import of the data, which
-        is covered in section~\ref{sec:import}. The two and four point
+        Data flow in the analysis. The first step is the import of the data,
+        which is covered in section~\ref{sec:import}. The two and four point
         functions are combined into pairs for each configuration. The data is
         then folded in half. The bootstrap step is covered in
         section~\ref{sec:bootstrap}. Then a correlated fit is performed, see
@@ -56,7 +59,6 @@ methods used will be explained along the way when they are needed.
     }
     \label{fig:analysis-flow}
 \end{figure}
-
 
 \subsection{Import data}
 \label{sec:import}
@@ -78,7 +80,12 @@ multiple times, those are the different versions.
 
 The number of configurations in each ensemble is called $N$.
 
-% TODO Folding
+In both space and time, the lattice used in the computation has periodic
+boundary conditions. This leads to a symmetry which $t$ and $T-t$ closely
+related. The correlation functions $C(t_1, t_2)$ are symmetric in $t_1$ and
+$t_2$, such that only the data in the interval $[0, T/2]$ carries independent
+information. Before starting any other calculations with the data, it is folded
+in half, like also shown in figure~\ref{fig:folded} later on.
 
 \subsection{Bootstrap}
 \label{sec:bootstrap}
@@ -89,10 +96,105 @@ samples $R$ was set to $R = 3N$.
 \subsection{Correlated fit}
 \label{sec:correlated_fit}
 
-The computed masses are shown in table~\ref{tab:masses}.
+The pion masses are contained in the correlation functions in the form of an
+exponential decay constant. Since time is periodic in this simulation, the
+correlation function is also periodic with the temporal lattice extent $T$.
+Therefore, the expectation is not a simple exponential decay but a cosh-like
+function. The four-point functions also have a constant contribution due to the
+finite lattice extent. For both two and four point functions, the functions
+that I fitted to the folded data are:
+\begin{equation}
+    \label{eq:fit2}
+    m_\piup(t, \lambda) = \lambda_1 \sbr{\exp(-\lambda_2 t) + \exp(-\lambda_2
+    [T - t])}
+\end{equation}
+and
+\begin{equation}
+    \label{eq:fit4}
+    m_{\piup\piup}(t, \lambda) = \lambda_1 \sbr{\exp(-\lambda_2 t) + \exp(-\lambda_2
+    [T - t])} + \lambda_3.
+\end{equation}
+
+The folded correlation functions with the fit functions are shown in
+figure~\ref{fig:folded}.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[c]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c2_folded.pdf}
+    \end{minipage}
+    \begin{minipage}[c]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c4_folded.pdf}
+    \end{minipage}
+    \caption{%
+        Folded correlation functions with cosh-like fit function. On the left
+        side, the two point function is shown, the four point function on the
+        right. Only the blue data points were used for fitting. The right
+        ordinate shows the residuals in great magnification (red). One can see
+        that the errors seem way too large. This is a result of the
+        autocorrelation of the data points.
+    }
+    \label{fig:folded}
+\end{figure}
+
+The correlation functions themselves are highly correlated with respect to
+time. Therefore, a regular least squared fit would give a $\chi^2$ that was way
+too low. The $p$-values usually end up around 1, which does not imply a perfect
+fit but that the data fits the model too \emph{well}.
+
+For the correlated fit, a new likelihood function is needed. I chose to keep
+the least squared likelihood function but incorporate the correlation into the
+$\chi^2$. First, a correlation matrix $\tens C$ is needed, which is computed
+from the $R$ bootstrap samples:
+\begin{equation}
+    \label{eq:correlation_matrix}
+    C_{ij} := \frac{1}{R[R-1]} \sum_{k=1}^R
+    [x_{ik} - \bar x_{iR}] [x_{jk} - \bar x_{jR}]
+    \eqnsep
+    \bar x_{iR} := \frac 1R \sum_{r=1}^R x_{ir}.
+\end{equation}
+
+Using this correlation matrix, a new $\chi^2$ can be defined which incorporates
+the inverse correlation matrix:
+\begin{equation}
+    \label{eq:chisq}
+    \chi^2_\text{corr} := \sum_{i, j}^T
+    \left[ \bar x_{iR} - f(t_i, \lambda) \right]
+    C^{-1}_{ij}
+    \left[ \bar x_{jR} - f(t_j, \lambda) \right].
+\end{equation}
+The regular $\chi^2$ has $\tens C^{-1} = \tens 1$ and is just the sum of the
+squared residuals.
+
+In the curve fitting process, a function like
+\texttt{scipy.optimize.curve\_fit} tries to find the parameters $\lambda$ such
+that $\chi^2$ becomes minimal. In my implementation, I used
+\texttt{scipy.optimize.leastsq} which tries to minimize the squared norm of a
+vector valued function. With a Cholesky decomposition, this can be done like
+so: Define the square bracket in eq.~\eqref{eq:chisq} to be the residual vector
+$\vec r$. Then the matrix multiplication can be written as
+\begin{equation}
+    \chi^2 = \vec r^\text T \tens C^{-1} \vec r.
+\end{equation}
+The Cholesky decomposition gives me $\tens C^{-1} = \tens U^\dagger \tens U$
+where $\tens U$ is a upper triangle matrix. Then I can write
+\begin{equation}
+    \chi^2 = [\tens U \vec r]^\dagger [\tens U \vec r]
+    = \| \tens U \vec r \|^2
+\end{equation}
+where $\tens U \vec r$ can be fed into \texttt{scipy.optimize.leastsq}.
+
+As shown in figure~\ref{fig:analysis-flow} the correlation matrix computed from
+the bootstrap samples is also used to fit the original data. Each fit yields a
+value for $\mpi$ and $\mpipi$. The computed masses are shown in
+table~\ref{tab:masses}.
 
 \subsection{Scattering length}
 \label{sec:scattering_length}
+
+\parencite{luescher/volume_dependence}:
 
 The computed scattering lengths are shown in table~\ref{tab:masses}.
 
