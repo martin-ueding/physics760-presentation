@@ -195,7 +195,11 @@ table~\ref{tab:masses}.
 \subsection{Scattering length}
 \label{sec:scattering_length}
 
-\parencite{luescher/volume_dependence}:
+\parencite{luescher/volume_dependence}
+
+Using the computed $\mpi$ and $\mpipi$ with Lüscher's formula, I can
+numerically solve for the scattering length $a_0$. In my program, I use
+\texttt{scipy.optimize.brentq} that is based on the algorithm by Brent.
 
 The computed scattering lengths are shown in table~\ref{tab:masses}.
 
