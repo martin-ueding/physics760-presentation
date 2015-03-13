@@ -48,14 +48,14 @@ methods used will be explained along the way when they are needed.
     \includegraphics[width=\linewidth]{sketches/Zeichnung.pdf}
     \caption{%
         Data flow in the analysis. The first step is the import of the data,
-        which is covered in section~\ref{sec:import}. The two and four point
+        which is covered in Section~\ref{sec:import}. The two and four point
         functions are combined into pairs for each configuration. The data is
         then folded in half. The bootstrap step is covered in
-        section~\ref{sec:bootstrap}. Then a correlated fit is performed, see
-        section~\ref{sec:correlated_fit} for details. The second to last step
+        Section~\ref{sec:bootstrap}. Then a correlated fit is performed, see
+        Section~\ref{sec:correlated_fit} for details. The second to last step
         is the application of Lüscher's formula, see
-        section~\ref{sec:scattering_length}. The results are shown in
-        section~\ref{sec:results}.
+        Section~\ref{sec:scattering_length}. The results are shown in
+        Section~\ref{sec:results}.
     }
     \label{fig:analysis-flow}
 \end{figure}
@@ -64,8 +64,8 @@ methods used will be explained along the way when they are needed.
 \label{sec:import}
 
 The data that I was given is organized in different ensembles (like A30.32,
-A100.24). For each ensembles, multiple configurations were simulated. The
-output of each configuration is a two-point correlation function $C_\piup(t)$
+A100.24). For each ensemble, multiple configurations were simulated. The
+output of each configuration is one two-point correlation function $C_\piup(t)$
 and three four-point correlation functions $C_{\piup\piup}^{(i)}(t)$. Those
 three different contractions are combined into a single
 $\piup\piup$-correlation function:
@@ -81,17 +81,37 @@ multiple times, those are the different versions.
 The number of configurations in each ensemble is called $N$.
 
 In both space and time, the lattice used in the computation has periodic
-boundary conditions. This leads to a symmetry which $t$ and $T-t$ closely
-related. The correlation functions $C(t_1, t_2)$ are symmetric in $t_1$ and
-$t_2$, such that only the data in the interval $[0, T/2]$ carries independent
-information. Before starting any other calculations with the data, it is folded
-in half, like also shown in figure~\ref{fig:folded} later on.
+boundary conditions. The spatial lattice extent is called $L$, the temporal one
+$T$. This leads to a symmetry where the time slices $t$ and $T-t$ closely
+related. The correlation functions $C(t)$ with $t = |t_1 - t_2|$ are symmetric
+in $t_1$ and $t_2$, such that only the data in the interval $[0, T/2]$ carries
+independent information. Before starting any other calculations with the data,
+it is folded in half and averaged. The data then looks like in
+Figure~\ref{fig:folded} which is shown later on.
 
 \subsection{Bootstrap}
 \label{sec:bootstrap}
 
-All error estimation is done with the bootstrap method. The number of bootstrap
-samples $R$ was set to $R = 3N$.
+All error estimation is done with the bootstrap method. One other known method
+to compute errors is the Gaussian error propagation. This method involves
+computing derivatives of the functions applied to the data, which can be either
+numerically unstable or just not really applicable: How does the variance of
+the mean change when you change the input data?
+
+In order to get rid of all those problems at the same time one does a meta
+analysis of the data itself. To get back to the example of the mean, let $X$ be
+the set of $N$ data points ($x_i \in \R$). Then the estimator of the mean
+$\bar\mu$ can be computed directly from $X$. Now $R$ bootstrap samples $X^r$
+are computed from the set by randomly selecting $N$ elements from $X$ and
+putting them into $X^r$ (upper index, no power). Since $X$ is sampled from the
+original distribution, it resembles the original distribution as good as it can
+with only $N$ elements. $X^r$ therefore is sampled from an approximation of the
+original distribution. Then the estimators for the means $\bar\mu^r$ are
+computed from the bootstrapped sets. The mean of all the $\bar\mu^r$ should
+give $\bar\mu$, which was computed from the original data. The error estimate
+is then the standard deviation of all the $\bar\mu^r$.
+
+The number of bootstrap samples $R$ was set to $R = 3N$ for each ensemble.
 
 \subsection{Correlated fit}
 \label{sec:correlated_fit}
@@ -99,10 +119,11 @@ samples $R$ was set to $R = 3N$.
 The pion masses are contained in the correlation functions in the form of an
 exponential decay constant. Since time is periodic in this simulation, the
 correlation function is also periodic with the temporal lattice extent $T$.
-Therefore, the expectation is not a simple exponential decay but a cosh-like
-function. The four-point functions also have a constant contribution due to the
-finite lattice extent. For both two and four point functions, the functions
-that I fitted to the folded data are:
+Therefore, the expectation is not a simple exponential decay—$\exp(-\lambda
+t)$—but a cosh-like function. The four-point functions also have a constant
+contribution due to the finite lattice extent. For both two and four point
+functions, the functions that I fitted to the folded data with parameters $\vec
+\lambda$ are:
 \begin{equation}
     \label{eq:fit2}
     m_\piup(t, \lambda) = \lambda_1 \sbr{\exp(-\lambda_2 t) + \exp(-\lambda_2
@@ -116,7 +137,7 @@ and
 \end{equation}
 
 The folded correlation functions with the fit functions are shown in
-figure~\ref{fig:folded}.
+Figure~\ref{fig:folded}.
 
 \begin{figure}[htbp]
     \centering
@@ -130,20 +151,22 @@ figure~\ref{fig:folded}.
         \includegraphics[width=\linewidth]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c4_folded.pdf}
     \end{minipage}
     \caption{%
-        Folded correlation functions with cosh-like fit function. On the left
-        side, the two point function is shown, the four point function on the
-        right. Only the blue data points were used for fitting. The right
-        ordinate shows the residuals in great magnification (red). One can see
-        that the errors seem way too large. This is a result of the
-        autocorrelation of the data points.
+        Folded correlation functions with cosh-like fit function using a
+        logarithmic ordinate scale. On the left side, the two point function is
+        shown, the four point function on the right. Only the blue data points
+        were used for fitting. The right ordinate shows the residuals in great
+        magnification (red). One can see that the errors seem way too large.
+        This is a result of the autocorrelation of the data points.
     }
     \label{fig:folded}
 \end{figure}
 
 The correlation functions themselves are highly correlated with respect to
-time. Therefore, a regular least squared fit would give a $\chi^2$ that was way
-too low. The $p$-values usually end up around 1, which does not imply a perfect
-fit but that the data fits the model too \emph{well}.
+time. Therefore, a regular least squared fit would give a $\chi^2$ that would
+be way too low. The $p$-values usually end up around 1, which does not imply a
+perfect fit but rather that the data fits the model too \emph{well}. This, in
+turn, means that errors and residuals are over-estimated with the given model.
+A different model is called for: the correlated fit.
 
 For the correlated fit, a new likelihood function is needed. I chose to keep
 the least squared likelihood function but incorporate the correlation into the
@@ -174,34 +197,44 @@ In the curve fitting process, a function like
 that $\chi^2$ becomes minimal. In my implementation, I used
 \texttt{scipy.optimize.leastsq} which tries to minimize the squared norm of a
 vector valued function. With a Cholesky decomposition, this can be done like
-so: Define the square bracket in eq.~\eqref{eq:chisq} to be the residual vector
+so: Define the square bracket in Eq.~\eqref{eq:chisq} to be the residual vector
 $\vec r$. Then the matrix multiplication can be written as
 \begin{equation}
     \chi^2 = \vec r^\text T \tens C^{-1} \vec r.
 \end{equation}
-The Cholesky decomposition gives me $\tens C^{-1} = \tens U^\dagger \tens U$
+The Cholesky decomposition gives me $\tens C^{-1} = \tens U^\dagger \tens U$,
 where $\tens U$ is a upper triangle matrix. Then I can write
 \begin{equation}
     \chi^2 = [\tens U \vec r]^\dagger [\tens U \vec r]
     = \| \tens U \vec r \|^2
 \end{equation}
-where $\tens U \vec r$ can be fed into \texttt{scipy.optimize.leastsq}.
+where $\tens U \vec r$ is a vector that can be fed into
+\texttt{scipy.optimize.leastsq}.
 
-As shown in figure~\ref{fig:analysis-flow} the correlation matrix computed from
+As shown in Figure~\ref{fig:analysis-flow}, the correlation matrix computed from
 the bootstrap samples is also used to fit the original data. Each fit yields a
 value for $\mpi$ and $\mpipi$. The computed masses are shown in
-table~\ref{tab:masses}.
+Table~\ref{tab:masses}.
 
 \subsection{Scattering length}
 \label{sec:scattering_length}
 
-\parencite{luescher/volume_dependence}
+There is a relation between mass difference to scattering length
+\parencite[(1.3)]{luescher/volume_dependence}:
+\begin{equation}
+    \label{eq:luescher}
+    \mpipi = 2\mpi - \frac{4 \piup a_0}{\mpi L^3} \sbr{1 + c_1 \frac{a_0}L + c_2 \frac{a_0^2}{L^2}}
+    \eqnsep
+    c_1 = \num{-2.837297}
+    \eqnsep
+    c_2 = \num{6.375183}
+\end{equation}
 
 Using the computed $\mpi$ and $\mpipi$ with Lüscher's formula, I can
 numerically solve for the scattering length $a_0$. In my program, I use
-\texttt{scipy.optimize.brentq} that is based on the algorithm by Brent.
+\texttt{scipy.optimize.brentq} that is based on the algorithm by Brent (1973).
 
-The computed scattering lengths are shown in table~\ref{tab:masses}.
+The computed scattering lengths are shown in Table~\ref{tab:masses}.
 
 \section{Results}
 \label{sec:results}
@@ -226,7 +259,9 @@ The computed scattering lengths are shown in table~\ref{tab:masses}.
         D45.32  & 0.12047 +- 0.00046 & 0.25057 +- 0.00137 & -2.416 +- 0.205
     \end{tabular}
     \caption{%
-        Computed masses from correlation functions.
+        Computed masses from correlation functions. The last column shows the
+        scattering length $a_0$ which is computed using Lüscher's formula,
+        Eq.~\eqref{eq:luescher}.
     }
     \label{tab:masses}
 \end{table}
@@ -252,7 +287,7 @@ The computed scattering lengths are shown in table~\ref{tab:masses}.
     \end{tabular}
     \caption{%
         Lattice size of the ensembles together with computed quantities.
-        These data points are also shown in figure~\ref{fig:result}.
+        These data points are also shown in Figure~\ref{fig:result}.
         The pion
         decay constants are taken from
         \parencite[table~1]{Knippschild/Pi_Pi_Scattering}.
@@ -260,13 +295,17 @@ The computed scattering lengths are shown in table~\ref{tab:masses}.
     \label{tab:computed}
 \end{table}
 
-The results from table~\ref{tab:computed} are shown in figure~\ref{fig:result}.
+The results from Table~\ref{tab:computed} are shown in Figure~\ref{fig:result}.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{plots/result.pdf}
     \caption{%
-        Results. Diamond data points are taken from draft paper.
+        $\mpi a_0$ as a function of $\mpi/f_\piup$ as shown in
+        Table~\ref{tab:computed}. Diamond data points are taken from draft
+        paper from Carsten Urbach's workgroup. Some ensembles had multiple
+        versions of the correlation functions in them, this plot shows all of
+        them in lexical order of the pathname.
     }
     \label{fig:result}
 \end{figure}
