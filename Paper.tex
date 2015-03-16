@@ -1,4 +1,4 @@
-\documentclass[11pt, english, fleqn, DIV=15, headinclude]{scrartcl}
+\documentclass[11pt, english, fleqn, DIV=10, headinclude]{scrartcl}
 
 \usepackage[bibatend, color]{header}
 
@@ -24,7 +24,10 @@
 \maketitle
 
 \begin{abstract}
-    % TODO
+    Correlation functions of pions that were computed with lattice QCD methods
+    are analyzed. The effective masses of single pions and two interacting
+    pions are extracted. Using a finite size formula by Lüscher, the S-wave
+    scattering length is computed.
 \end{abstract}
 
 \tableofcontents
@@ -33,9 +36,13 @@
 
 \section{Data generation}
 
-\subsection{Metropolis algorithm}
+% Weighted generation with HMC
 
-\subsection{Correlation functions}
+% Downloadable ensembles
+
+% Operators on data
+
+% Contractions
 
 \section{Analysis methods}
 
@@ -102,8 +109,8 @@ In order to get rid of all those problems at the same time one does a meta
 analysis of the data itself. To get back to the example of the mean, let $X$ be
 the set of $N$ data points ($x_i \in \R$). Then the estimator of the mean
 $\bar\mu$ can be computed directly from $X$. Now $R$ bootstrap samples $X^r$
-are computed from the set by randomly selecting $N$ elements from $X$ and
-putting them into $X^r$ (upper index, no power). Since $X$ is sampled from the
+(upper index, no power) are computed from the set by randomly selecting $N$
+elements from $X$ and putting them into $X^r$. Since $X$ is sampled from the
 original distribution, it resembles the original distribution as good as it can
 with only $N$ elements. $X^r$ therefore is sampled from an approximation of the
 original distribution. Then the estimators for the means $\bar\mu^r$ are
@@ -119,8 +126,8 @@ The number of bootstrap samples $R$ was set to $R = 3N$ for each ensemble.
 The pion masses are contained in the correlation functions in the form of an
 exponential decay constant. Since time is periodic in this simulation, the
 correlation function is also periodic with the temporal lattice extent $T$.
-Therefore, the expectation is not a simple exponential decay—$\exp(-\lambda
-t)$—but a cosh-like function. The four-point functions also have a constant
+Therefore, the expectation is not a simple exponential decay, $\exp(-\lambda
+t)$, but a cosh-like function. The four-point functions also have a constant
 contribution due to the finite lattice extent. For both two and four point
 functions, the functions that I fitted to the folded data with parameters $\vec
 \lambda$ are:
@@ -151,22 +158,24 @@ Figure~\ref{fig:folded}.
         \includegraphics[width=\linewidth]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c4_folded.pdf}
     \end{minipage}
     \caption{%
-        Folded correlation functions with cosh-like fit function using a
-        logarithmic ordinate scale. On the left side, the two point function is
-        shown, the four point function on the right. Only the blue data points
-        were used for fitting. The right ordinate shows the residuals in great
-        magnification (red). One can see that the errors seem way too large.
-        This is a result of the autocorrelation of the data points.
+        Folded correlation functions with cosh-like fit function. On the left
+        side, the two point function is shown using a logarithmic ordinate
+        scale. The four point function is shown on the right. Only the blue
+        data points were used for fitting. The right ordinate shows the
+        residuals in great magnification (red). One can see that the errors
+        seem way too large compared to the residuals. This is a result of the
+        autocorrelation of the data points.
     }
     \label{fig:folded}
 \end{figure}
 
 The correlation functions themselves are highly correlated with respect to
 time. Therefore, a regular least squared fit would give a $\chi^2$ that would
-be way too low. The $p$-values usually end up around 1, which does not imply a
-perfect fit but rather that the data fits the model too \emph{well}. This, in
-turn, means that errors and residuals are over-estimated with the given model.
-A different model is called for: the correlated fit.
+be way too low for the assumed degrees of freedom. The $p$-values usually end
+up around 1, which does not imply a perfect fit but rather that the data fits
+the model \emph{too well}. This, in turn, means that errors and residuals are
+over-estimated with the given model. A different model is called for: the
+correlated fit.
 
 For the correlated fit, a new likelihood function is needed. I chose to keep
 the least squared likelihood function but incorporate the correlation into the
@@ -174,8 +183,8 @@ $\chi^2$. First, a correlation matrix $\tens C$ is needed, which is computed
 from the $R$ bootstrap samples:
 \begin{equation}
     \label{eq:correlation_matrix}
-    C_{ij} := \frac{1}{R[R-1]} \sum_{k=1}^R
-    [x_{ik} - \bar x_{iR}] [x_{jk} - \bar x_{jR}]
+    C_{ij} := \frac{1}{R[R-1]} \sum_{r=1}^R
+    [x_{ir} - \bar x_{iR}] [x_{jr} - \bar x_{jR}]
     \eqnsep
     \bar x_{iR} := \frac 1R \sum_{r=1}^R x_{ir}.
 \end{equation}
@@ -197,8 +206,8 @@ In the curve fitting process, a function like
 that $\chi^2$ becomes minimal. In my implementation, I used
 \texttt{scipy.optimize.leastsq} which tries to minimize the squared norm of a
 vector valued function. With a Cholesky decomposition, this can be done like
-so: Define the square bracket in Eq.~\eqref{eq:chisq} to be the residual vector
-$\vec r$. Then the matrix multiplication can be written as
+so: Define the square bracket in Equation~\eqref{eq:chisq} to be the residual
+vector $\vec r$. Then the matrix multiplication can be written as
 \begin{equation}
     \chi^2 = \vec r^\text T \tens C^{-1} \vec r.
 \end{equation}
@@ -233,11 +242,79 @@ There is a relation between mass difference to scattering length
 Using the computed $\mpi$ and $\mpipi$ with Lüscher's formula, I can
 numerically solve for the scattering length $a_0$. In my program, I use
 \texttt{scipy.optimize.brentq} that is based on the algorithm by Brent (1973).
-
 The computed scattering lengths are shown in Table~\ref{tab:masses}.
+
+Equation~\eqref{eq:luescher} can be motivated like so: Let $\hat H = \hat H_0 +
+\hat V$ be the Hamiltonian for two identical particles where $\hat H_0$ is the
+free Hamiltonian and $\hat V$ a spherically symmetric potential. The
+eigenfunctions of $\hat H_0$ are plane waves which are denoted $\ket{\vec p,
+\vec q}$. In continous space, the normalization is
+\parencite[(2.10)]{luescher/volume_dependence}
+\[
+    \braket{\vec p', \vec q'|\vec p, \vec q}
+    = [2\piup]^6 \sbr{
+        \delta(\vec p' - \vec p)
+        \delta(\vec q' - \vec q)
+        +
+        \delta(\vec p' - \vec q)
+        \delta(\vec q' - \vec p)
+    }.
+\]
+On the discrete lattice, the possible momentum values are restricted to lattice
+values and the potential will be periodic due to periodic boundary conditions.
+This changes the normalization to
+\parencite[(2.21)]{luescher/volume_dependence}
+\[
+    \braket{\vec p', \vec q'|\vec p, \vec q}
+    = L^6 \sbr{
+        \delta_{\vec p', \vec p}
+        \delta_{\vec q', \vec q}
+        +
+        \delta_{\vec p', \vec q}
+        \delta_{\vec q', \vec p}
+    }.
+\]
+
+The matrix element of the potential $\vec V$ are given by
+\parencite[(2.21)]{luescher/volume_dependence}
+\[
+    \braket{\vec p', \vec q'| \hat V | \vec p, \vec q}
+    = L^3 \delta_{\vec P', \vec P} \hat V\del{\frac12 [\vec p' - \vec q'],
+    \frac12 [\vec p - \vec q]},
+\]
+where $\vec P$ is the total momentum of the two particles. The energy shift in
+first order of $V$ for the ground state (all momenta are zero) then is the
+quotient \parencite[(2.24)]{luescher/volume_dependence}:
+\[
+    \Deltaup E = \frac{1}{2L^3} \hat V(\vec 0, \vec 0) + \mathcal O(V^2).
+\]
+The scattering amplitude as well as the S-wave scattering length $a_0$ can be
+expanded in powers of $\hat V$ (Born series). Using first order term from 
+\parencite[(2.18)]{luescher/volume_dependence}, above equation can be rewritten
+with the scattering length
+\parencite[(2.25)]{luescher/volume_dependence}:
+\[
+    \Deltaup E = - \frac{4\piup a_0}{m L^3} + \mathcal O(V^2).
+\]
+
+To first order on $V$, the leading term scales with $L^{-3}$, like in
+Equation~\eqref{eq:luescher}. To obtain more terms, a complete perturbation
+expansion needs to be written out. That expansion will be both in terms of
+$L^{-1}$ \emph{and} $V$. \citeauthor{luescher/volume_dependence} then was able
+to group those terms in powers of $L^{-1}$ and obtain
+Equation~\eqref{eq:luescher}.
+
+% FIXME Maybe write a bit more on the methods?
+
 
 \section{Results}
 \label{sec:results}
+
+My analysis of the correlation functions gives me values for the masses of a
+single pion ($\mpi$) and a pair of them ($\mpipi$). Using
+Equation~\eqref{eq:luescher}, I was able to compute the S-wave scattering
+length $a_0$ from the energy difference. Those values are listed in
+Table~\ref{tab:masses}.
 
 \begin{table}
     \centering
@@ -261,10 +338,19 @@ The computed scattering lengths are shown in Table~\ref{tab:masses}.
     \caption{%
         Computed masses from correlation functions. The last column shows the
         scattering length $a_0$ which is computed using Lüscher's formula,
-        Eq.~\eqref{eq:luescher}.
+        Equation~\eqref{eq:luescher}.
     }
     \label{tab:masses}
 \end{table}
+
+The different ensembles assume different masses for the quarks. The first
+number behind the letter gives the assumed quark mass. In most cases, a lower
+quark mass also yields a lower pion mass $\mpi$. Those pion masses are not
+directly the physical ones, one needs to extrapolate to the physical point. The
+masses and scattering lengths are given in lattice units and depends on the
+lattice spacing. The product of mass and scattering length, $a_0 \mpi$, is
+independent of the lattice spacing and a good measure for extrapolation.
+Table~\ref{tab:computed} shows this product, as well as the decay constant.
 
 \begin{table}
     \centering
@@ -287,8 +373,7 @@ The computed scattering lengths are shown in Table~\ref{tab:masses}.
     \end{tabular}
     \caption{%
         Lattice size of the ensembles together with computed quantities.
-        These data points are also shown in Figure~\ref{fig:result}.
-        The pion
+        These data points are also shown in Figure~\ref{fig:result}. The pion
         decay constants are taken from
         \parencite[table~1]{Knippschild/Pi_Pi_Scattering}.
     }
