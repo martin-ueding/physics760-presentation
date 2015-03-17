@@ -233,7 +233,7 @@ squared residuals.
 
 In the curve fitting process, a function like
 \texttt{scipy.optimize.curve\_fit} tries to find the parameters $\lambda$ such
-that $\chi^2$ becomes minimal. In my implementation, I used
+that $\chi^2$ becomes minimal. In my implementation, I used the function
 \texttt{scipy.optimize.leastsq} which tries to minimize the squared norm of a
 vector valued function. With a Cholesky decomposition, this can be done like
 so: Define the square bracket in Equation~\eqref{eq:chisq} to be the residual
@@ -249,6 +249,7 @@ where $\tens U$ is a upper triangle matrix. Then I can write
 \end{equation}
 where $\tens U \vec r$ is a vector that can be fed into
 \texttt{scipy.optimize.leastsq}.
+\nocite{SciPy}
 
 As shown in Figure~\ref{fig:analysis-flow}, the correlation matrix computed from
 the bootstrap samples is also used to fit the original data. Each fit yields a
@@ -399,6 +400,8 @@ compatible with the reference and expectation.
     }
     \label{fig:result}
 \end{figure}
+
+\clearpage
 
 \end{document}
 

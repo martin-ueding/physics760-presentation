@@ -53,6 +53,39 @@
 
 \section{Data generation}
 
+\begin{frame}
+    \frametitle{Monte Carlo for quantum mechanics}
+
+    Andreas Kell, Martin Efferz and Simon Blanke introduced:
+    \begin{itemize}
+        \item
+            Feynman's path integral formalism
+        \item
+            Markov chains for weighted generation
+        \item
+            Metropolis algorithm
+        \item
+            Energy from correlation functions
+    \end{itemize}
+
+    Those ideas can be used for QCD
+\end{frame}
+
+\begin{frame}
+    \frametitle{Lattice QCD}
+
+    \begin{itemize}
+        \item
+            Use action of QCD; parametrized by quark mass, …
+        \item
+            Generate configurations, weighted by $\exp(-S)$
+        \item
+            Examine observables on those configurations, meson operators in
+            this case
+        \item
+            Correlation functions lead to masses
+    \end{itemize}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              Analysis methods                               %
@@ -100,7 +133,7 @@
         \item
             Analysis function $f$: Transforms input data $X$ into output data
             $Y$ \\
-            E.g. samples $X = \{x_i\}$ to median $Y$
+            E.g. samples $X = \{x_i\}_i$ to median $Y$
         \item
             $f(X)$ is estimate for value
         \item
@@ -134,7 +167,7 @@
     \frametitle{Correlation in data points}
     \begin{itemize}
         \item
-            Markov chain data is correlated
+            Correlation functions are correlated in time
         \item
             Regular fit will give wrong $\chi^2$ and $p \approx 1$
         \item
@@ -222,7 +255,7 @@
 \begin{frame}
     \frametitle{From masses to scattering length}
 
-    There is a relation between mass difference to scattering length
+    There is a relation between mass difference to scattering length \\
     \parencite[(1.3)]{luescher/volume_dependence}:
     \[
         W = 2m - \frac{4 \piup a_0}{m L^3} \sbr{1 + c_1 \frac{a_0}L + c_2 \frac{a_0^2}{L^2}}
@@ -239,9 +272,22 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Derivation of Lüscher's formula}
+    \frametitle{Motivation of Lüscher's formula}
 
-    % TODO
+    \begin{itemize}
+        \item
+            Two identical particles in $L^3$ box
+        \item
+            $H = H_0 + V$, $V$ short ranged
+        \item
+            Probability to be in interaction range $\propto L^{-3}$
+        \item
+            First order of $V$: Energy shift $\propto L^{-3}$
+        \item
+            Born series: $V(\vec 0, \vec 0)$ $\propto$ scattering length
+        \item
+            Higher order in $V$ gives $\L^{-4}$ and higher terms 
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
