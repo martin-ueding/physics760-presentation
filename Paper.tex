@@ -36,13 +36,42 @@
 
 \section{Data generation}
 
-% Weighted generation with HMC
+Monte Carlo methods can be used to simulate quantum systems. Key pieces are
+Feynman's path integral formalism and Euclidean spacetime where the metric
+tensor $\tens\eta$ has signature $\pm 4$ and the weight factor in the path
+integral is $\exp(-S_\text{cl})$ instead of $\exp(\iup S_\text{cl})$ where
+$S_\text{cl}$ is the classical action
+\parencite[Section~2]{Creutz/Statistical_Approach_QM}. A Monte Carlo algorithm
+like the Metropolis algorithm can then be used to generate configurations which
+are already distributed by the weight of the classical action. Therefore,
+expectational values of observables are simply calculated and averaged over all
+available configurations \parencite[(3.7)]{Creutz/Statistical_Approach_QM}.
 
-% Downloadable ensembles
+The group of Andreas Kell, Martin Efferz and Simon Blanke have used this for
+the harmonic oscillator in their Computational Physics project this year. I
+also did this in my bachelor's thesis: \parencite{Ueding/Bachelorarbeit}.
 
-% Operators on data
+For quantum chromodynamics (QCD), the theory of the strong force, this
+methodology can be used as well. The action of QCD is used with a hybrid Monte
+Carlo algorithm to generate configurations of gauge fields on a four
+dimensional lattice. This process is done for several ensembles which differ in
+parameters like the quark mass. Ensemble generation takes a lot of computing
+time, so the results are made available to download.
+% TODO Would be nice to have a location where this could be downloaded.
 
-% Contractions
+As with the harmonic oscillator on the lattice, expectation values of
+observables can be computed for each configuration of the ensembles and then
+averaged (without weight) over all ensembles yielding an estimate for the
+observable. Since this uses a field theory, particles of interested can be
+created at the beginning of time and annihilated at the end of the temporal
+lattice extent. This way, specific particle configurations (like
+$\piup$–$\piup$ scattering) can be examined without needing to generate new
+configurations.
+
+Using the correct operators, it is possible to construct correlation functions
+which contain information about the energies/masses of the involved particles,
+analogously to \parencite[(4.14)]{Creutz/Statistical_Approach_QM} for the
+harmonic oscillator. I was given those correlation functions to analyze.
 
 \section{Analysis methods}
 
