@@ -53,9 +53,6 @@
 
 \section{Data generation}
 
-\subsection{Metropolis algorithm}
-
-\subsection{Correlation functions}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              Analysis methods                               %
@@ -151,36 +148,36 @@
     New $\chi^2$:
     \[
         \chi^2 := \sum_{i, j}^T
-        \left[ \bar x_{iN} - f(t_i, \lambda) \right]
+        \left[ \bar x_{iR} - f(t_i, \lambda) \right]
         C^{-1}_{ij}
-        \left[ \bar x_{jN} - f(t_j, \lambda) \right]
+        \left[ \bar x_{jR} - f(t_j, \lambda) \right]
         \eqnsep
-        \bar x_{iN} := \frac 1N \sum_{n=1}^N x_{in}
+        \bar x_{iR} := \frac 1R \sum_{r=1}^R x_{ir}
     \]
     Correlation matrix:
     \[
-        C_{ij} := \frac{1}{N[N-1]} \sum_{k=1}^N
-        [x_{ik} - \bar x_{iN}] [x_{jk} - \bar x_{jN}]
+        C_{ij} := \frac{1}{R[R-1]} \sum_{r=1}^R
+        [x_{ir} - \bar x_{iR}] [x_{jr} - \bar x_{jR}]
     \]
 
     \begin{description}
         \item[$\lambda$] Fit parameters
         \item[$i$, $j$] Time slice number
-        \item[$N$] Number of measurements
+        \item[$R$] Number of bootstrap samples
     \end{description}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Correlation matrix with less indices}
-
-    \begin{align*}
-        C_{ij}
-        &= \frac{1}{N[N-1]} \sum_{k=1}^N [x_{ik} - \bar x_{iN}] [x_{jk} - \bar x_{jN}] \\
-        &= \frac{1}{N[N-1]} \sum_{k=1}^N d_{ik} d_{jk} & d_{ik} := x_{ik} - \bar x_{iN} \\
-        &= \frac{1}{N[N-1]} \sum_{k=1}^N d_{ik} d_{kj}^{\text T} \\
-        &= \frac{1}{N[N-1]} \vec d_{i} \vec d_{j}^{\text T} \\
-    \end{align*}
-\end{frame}
+%\begin{frame}
+%    \frametitle{Correlation matrix with less indices}
+%
+%    \begin{align*}
+%        C_{ij}
+%        &= \frac{1}{N[N-1]} \sum_{k=1}^N [x_{ik} - \bar x_{iN}] [x_{jk} - \bar x_{jN}] \\
+%        &= \frac{1}{N[N-1]} \sum_{k=1}^N d_{ik} d_{jk} & d_{ik} := x_{ik} - \bar x_{iN} \\
+%        &= \frac{1}{N[N-1]} \sum_{k=1}^N d_{ik} d_{kj}^{\text T} \\
+%        &= \frac{1}{N[N-1]} \vec d_{i} \vec d_{j}^{\text T} \\
+%    \end{align*}
+%\end{frame}
 
 \begin{frame}
     \frametitle{Correlation matrix}
@@ -189,29 +186,29 @@
     \end{center}
 \end{frame}
 
-\begin{frame}
-    \frametitle{$\chi^2$ with less indices}
-
-    \begin{align*}
-        \chi^2
-        &= \sum_{i, j}^T
-        \left[ \bar x_{iN} - f(t_i, \lambda) \right]
-        C^{-1}_{ij}
-        \left[ \bar x_{jN} - f(t_j, \lambda) \right] \\
-        &= 
-        \vec r^{\text T}
-        \vec C^{-1}
-        \vec r
-        &
-        r_i := \bar x_{iN} - f(t_i, \lambda)
-        \\
-    \end{align*}
-
-    Comparison: Plain $\chi^2$ is
-    \[
-        \chi^2 = |\vec r|^2 = \vec r^{\text T} \vec r
-    \]
-\end{frame}
+%\begin{frame}
+%    \frametitle{$\chi^2$ with less indices}
+%
+%    \begin{align*}
+%        \chi^2
+%        &= \sum_{i, j}^T
+%        \left[ \bar x_{iN} - f(t_i, \lambda) \right]
+%        C^{-1}_{ij}
+%        \left[ \bar x_{jN} - f(t_j, \lambda) \right] \\
+%        &= 
+%        \vec r^{\text T}
+%        \vec C^{-1}
+%        \vec r
+%        &
+%        r_i := \bar x_{iN} - f(t_i, \lambda)
+%        \\
+%    \end{align*}
+%
+%    Comparison: Plain $\chi^2$ is
+%    \[
+%        \chi^2 = |\vec r|^2 = \vec r^{\text T} \vec r
+%    \]
+%\end{frame}
 
 \begin{frame}
     \frametitle{Correlated fit}
