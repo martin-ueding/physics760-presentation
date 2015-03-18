@@ -37,9 +37,9 @@
 \section{Data generation}
 
 Monte Carlo methods can be used to simulate quantum systems. Key pieces are
-Feynman's path integral formalism and Euclidean spacetime where the metric
+Feynman's path integral formalism and Euclidean spacetime. In the latter, the metric
 tensor $\tens\eta$ has signature $\pm 4$ and the weight factor in the path
-integral is $\exp(-S_\text{cl})$ instead of $\exp(\iup S_\text{cl})$ where
+integral is $\exp(-S_\text{cl})$ instead of $\exp(\iup S_\text{cl})$; 
 $S_\text{cl}$ is the classical action
 \parencite[Section~2]{Creutz/Statistical_Approach_QM}. A Monte Carlo algorithm
 like the Metropolis algorithm can then be used to generate configurations which
@@ -49,7 +49,7 @@ available configurations \parencite[(3.7)]{Creutz/Statistical_Approach_QM}.
 
 The group of Andreas Kell, Martin Efferz and Simon Blanke have used this for
 the harmonic oscillator in their Computational Physics project this year. I
-also did this in my bachelor's thesis: \parencite{Ueding/Bachelorarbeit}.
+also did this in my bachelor's thesis last year \parencite{Ueding/Bachelorarbeit}.
 
 For quantum chromodynamics (QCD), the theory of the strong force, this
 methodology can be used as well. The action of QCD is used with a hybrid Monte
@@ -62,11 +62,10 @@ time, so the results are made available to download.
 As with the harmonic oscillator on the lattice, expectation values of
 observables can be computed for each configuration of the ensembles and then
 averaged (without weight) over all ensembles yielding an estimate for the
-observable. Since this uses a field theory, particles of interested can be
-created at the beginning of time and annihilated at the end of the temporal
-lattice extent. This way, specific particle configurations (like
-$\piup$–$\piup$ scattering) can be examined without needing to generate new
-configurations.
+observable. Since this uses a field theory, particles of interest can be
+created at the beginning of time and annihilated laster on. This way, specific
+particle configurations (like $\piup$–$\piup$ scattering) can be examined
+without needing to generate new configurations.
 
 Using the correct operators, it is possible to construct correlation functions
 which contain information about the energies/masses of the involved particles,
@@ -100,11 +99,11 @@ methods used will be explained along the way when they are needed.
 \label{sec:import}
 
 The data that I was given is organized in different ensembles (like A30.32,
-A100.24). For each ensemble, multiple configurations were simulated. The
-output of each configuration is one two-point correlation function $C_\piup(t)$
-and three four-point correlation functions $C_{\piup\piup}^{(i)}(t)$. Those
-three different contractions are combined into a single
-$\piup\piup$-correlation function:
+A100.24) as mentioned in the introduction. For each ensemble, multiple
+configurations were simulated. The output of each configuration is one
+two-point correlation function $C_\piup(t)$ and three four-point correlation
+functions $C_{\piup\piup}^{(i)}(t)$. Those three different contractions are
+combined into a single $\piup\piup$-correlation function:
 \begin{equation}
     C_{\piup\piup}(t) = C_{\piup\piup}^{(1)}(t) + C_{\piup\piup}^{(2)}(t)
     - 2 C_{\piup\piup}^{(3)}(t).
@@ -123,7 +122,7 @@ related. The correlation functions $C(t)$ with $t = |t_1 - t_2|$ are symmetric
 in $t_1$ and $t_2$, such that only the data in the interval $[0, T/2]$ carries
 independent information. Before starting any other calculations with the data,
 it is folded in half and averaged. The data then looks like in
-Figure~\ref{fig:folded} which is shown later on.
+Figure~\ref{fig:folded} which appears laster on.
 
 \subsection{Bootstrap}
 \label{sec:bootstrap}
@@ -172,6 +171,8 @@ and
     m_{\piup\piup}(t, \lambda) = \lambda_1 \sbr{\exp(-\lambda_2 t) + \exp(-\lambda_2
     [T - t])} + \lambda_3.
 \end{equation}
+The parameter $\lambda_3$ is a lattice artifact that will vanish for $L \to
+\infty$.
 
 The folded correlation functions with the fit functions are shown in
 Figure~\ref{fig:folded}.
@@ -208,9 +209,9 @@ over-estimated with the given model. A different model is called for: the
 correlated fit.
 
 For the correlated fit, a new likelihood function is needed. I chose to keep
-the least squared likelihood function but incorporate the correlation into the
-$\chi^2$. First, a correlation matrix $\tens C$ is needed, which is computed
-from the $R$ bootstrap samples: \parencite[Section~2]{Michael:1994sz}
+the falling exponential likelihood function but incorporate the correlation
+into the $\chi^2$. First, a correlation matrix $\tens C$ is needed, which is
+computed from the $R$ bootstrap samples: \parencite[Section~2]{Michael:1994sz}
 \begin{equation}
     \label{eq:correlation_matrix}
     C_{ij} := \frac{1}{R[R-1]} \sum_{r=1}^R
@@ -232,12 +233,12 @@ The regular $\chi^2$ has $\tens C^{-1} = \tens 1$ and is just the sum of the
 squared residuals.
 
 In the curve fitting process, a function like
-\texttt{scipy.optimize.curve\_fit} tries to find the parameters $\lambda$ such
-that $\chi^2$ becomes minimal. In my implementation, I used the function
+\texttt{scipy.optimize.curve\_fit} tries to find the parameters $\vec\lambda$
+such that $\chi^2$ becomes minimal. In my implementation, I used the function
 \texttt{scipy.optimize.leastsq} which tries to minimize the squared norm of a
 vector valued function. With a Cholesky decomposition, this can be done like
 so: Define the square bracket in Equation~\eqref{eq:chisq} to be the residual
-vector $\vec r$. Then the matrix multiplication can be written as
+vector $\vec r(\vec \lambda)$. Then the matrix multiplication can be written as
 \begin{equation}
     \chi^2 = \vec r^\text T \tens C^{-1} \vec r.
 \end{equation}
@@ -280,11 +281,11 @@ Equation~\eqref{eq:luescher} can be motivated like so: Let $\hat H = \hat H_0 +
 free Hamiltonian and $\hat V$ a spherically symmetric potential with a limited
 range (or faster than $1/\sqrt r$ decay). Then the probability that the two
 particles are in interaction range scales like $L^{-3}$ as this is the inverse
-volume which the two particles occupy. Then the most prominent finite size
-effect scales to the third power, all other effects can only have higher
-powers.
+volume which the two particles occupy. The most prominent finite size effect
+scales to the third power, all other effects can only have higher powers of
+$L^{-1}$.
 
-In the first order of the potential $V$ the ground state (all momenta are zero)
+In the first order of the potential $V$, the ground state (all momenta are zero)
 will have an energy shift proportional to $L^{-3}$
 \parencite[(2.24)]{luescher/volume_dependence}:
 \[
@@ -299,11 +300,11 @@ with the scattering length
     \Deltaup E = - \frac{4\piup a_0}{m L^3} + \mathcal O(V^2).
 \]
 
-To first order on $V$, the leading term scales with $L^{-3}$, like in
-Equation~\eqref{eq:luescher}. To obtain more terms, a complete perturbation
-expansion needs to be written out. That expansion will be both in terms of
-$L^{-1}$ and $V$. \citeauthor{luescher/volume_dependence} then was able to
-group those terms in powers of $L^{-1}$ and obtain
+To first order on the potential $V$, the leading term scales with $L^{-3}$,
+like in Equation~\eqref{eq:luescher}. To obtain more terms, a complete
+perturbation expansion needs to be written out. That expansion will be both in
+terms of $L^{-1}$ and $V$. \citeauthor{luescher/volume_dependence} then was
+able to group those terms in powers of $L^{-1}$ and obtain
 Equation~\eqref{eq:luescher}.
 
 \section{Results}
@@ -400,6 +401,12 @@ compatible with the reference and expectation.
     }
     \label{fig:result}
 \end{figure}
+
+The range of fitting was set manually by looking at the plateau of the
+effective masses. This introduces some statistical errors which cannot be
+quantified with the current machinery. A way to get beyond this limitation is
+to run the whole analysis with all possible fit ranges. The different result
+are then weighted by the $p$-values of the respective fit.
 
 \clearpage
 
