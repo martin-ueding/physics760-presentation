@@ -174,8 +174,19 @@ and
 The parameter $\lambda_3$ is a lattice artifact that will vanish for $L \to
 \infty$.
 
-The folded correlation functions with the fit functions are shown in
-Figure~\ref{fig:folded}.
+In order to determine the fit range, I have used the effective mass as shown in
+Figure~\ref{fig:m_eff}. The plateau starts at $t/a = 13$, so those are the
+points I have used. The folded correlation functions with the fit functions are
+shown in Figure~\ref{fig:folded}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{plots/A100_24_L24_T48_beta190_mul0100_musig150_mudel190_kappa1632550__ev120__TB2_SO_LI6_new_c2_m_eff.pdf}
+    \caption{%
+        Effective mass of A100.24 ensemble.
+    }
+    \label{fig:m_eff}
+\end{figure}
 
 \begin{figure}[htbp]
     \centering
@@ -195,7 +206,7 @@ Figure~\ref{fig:folded}.
         data points were used for fitting. The right ordinate shows the
         residuals in great magnification (red). One can see that the errors
         seem way too large compared to the residuals. This is a result of the
-        autocorrelation of the data points.
+        autocorrelation of the data points. Ensemble is A100.24.
     }
     \label{fig:folded}
 \end{figure}
@@ -403,10 +414,11 @@ compatible with the reference and expectation.
 \end{figure}
 
 The range of fitting was set manually by looking at the plateau of the
-effective masses. This introduces some statistical errors which cannot be
-quantified with the current machinery. A way to get beyond this limitation is
-to run the whole analysis with all possible fit ranges. The different result
-are then weighted by the $p$-values of the respective fit.
+effective masses (see Figure~\ref{fig:m_eff}). This introduces some statistical
+errors which cannot be quantified with the current machinery. A way to get
+beyond this limitation is to run the whole analysis with all possible fit
+ranges. The different result are then weighted by the $p$-values of the
+respective fit.
 
 \clearpage
 
